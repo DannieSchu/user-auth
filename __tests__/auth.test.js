@@ -57,4 +57,24 @@ describe('app routes', () => {
         });
       });
   });
+
+  it('fails to log in a user with a bad password', async() => {
+    await User.create({         
+      username: 'charlotteKitty',
+      password: 'wilmington'
+    });
+         
+    return request(app)
+      .post('/api/v1/auth/login')
+      .send({ 
+        username: 'charlotteKitty',
+        password: 'butters'
+      })
+      .then(res => {
+        expect(res.body).toEqual({
+          message: 'Invalid username or password',
+          status: 500
+        });
+      });
+  });
 });
